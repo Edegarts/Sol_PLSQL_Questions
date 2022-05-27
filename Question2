@@ -1,0 +1,17 @@
+CREATE TABLE Resultado (saida VARCHAR2);
+/* ##########*/
+CREATE OR REPLACE  FUNCTION Print_Numbers AS
+	begin
+        for i in 1 .. 100
+        loop
+           INSERT INTO numbers (num) values (decode ((mod(i,15)),0, "FooBaa",(decode((mod(1, 3)),0,"Foo", decode((mod(1,5), 0, "Baa", i))))
+        end loop;
+	end;
+/* ##########*/
+SELECT Print_Numbers FROM dual;
+/* ##########*/
+select saida from resultado order by saida;
+/* ##########*/
+/*Como os ambientes de teste estão disponíveis apenas para SQLLite, não foi possível detectar se há algum problema nos decodes
+Também não foi implementado tratamento de erros.*/
+/* A solução também pode usar diretamente dbms_output.put_line(decode ...), ao invés de guardar os registros em tabela*/
