@@ -1,0 +1,16 @@
+/* 5 */
+
+Select y.* from 
+(select X.Nome, X.Nota, X.Valor
+from (
+		select A.Nome , (select Case A.Valor  between N.Valor_Min AND N.Valor_Max THEN N.Nota from Notas N) Nota, A.Valor from Alunos A 
+	) X
+where X.Nota >=8
+union 
+select X.Nome, X.Nota, X.Valor
+from (
+		select 'NULL', (select Case A.Valor  between N.Valor_Min AND N.Valor_Max THEN N.Nota from Notas N) Nota, A.Valor from Alunos A 
+	) X
+where X.Nota < 8
+) y
+order by CASE WHEN Nome != 'NULL' THEN y.Nota desc ELSE y.Nota asc END, y.Nome
