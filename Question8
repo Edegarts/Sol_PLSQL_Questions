@@ -1,0 +1,6 @@
+/* 8 */
+
+select distinct name from (
+  select name from dogs
+  UNION ALL
+  select name from cats )
