@@ -1,0 +1,34 @@
+
+/*RECRIAR tcall com autoincrement*/
+
+drop table tcall;
+
+create table tcall(
+                oid number primary key AUTOINCREMENT,
+                tipo number,
+                subtipo number,
+                data_criacao date
+);
+
+
+CREATE OR REPLACE PROCEDURE Insere_om (v_oid number,v_tipo number, v_subtipo number) IS
+ 
+ IF exists (select 1 from om_record_natureza on where on.tipo = v_tipo and on.subtipo = v_subtipo) THEN
+  INSERT INTO om_record (SEQ_oid.NEXTVAL, tipo, subtipo, natureza, data_criacao) values (v_oid ,v_tipo , v_subtipo ,(select on.natureza from om_record_natureza on where on.tipo = v_tipo and on.subtipo = v_subtipo) , sysdate)
+  COMMIT; 
+ ELSIF not exists (select 1 from om_record_natureza on where on.tipo = v_tipo and on.subtipo = v_subtipo) THEN
+  INSERT INTO om_record (EQ_oid.NEXTVAL, tipo, subtipo, natureza, data_criacao) values (v_oid ,v_tipo , v_subtipo ,0 , sysdate)
+  COMMIT;
+  
+ END Insere_om;
+ 
+ 
+CREATE OR REPLACE TRIGGER Grava_om_record
+BEFORE INSERT  ON tcall REFERENCING NEW AS NEW OLD AS OLD
+FOR EACH ROW
+DECLARE
+
+BEGIN
+Insere_om (:new.oid, :new.v_tipo, :nem.v_subtipo);
+
+END Grava_om_record;
