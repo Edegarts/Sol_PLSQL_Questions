@@ -12,6 +12,6 @@ SELECT Print_Numbers FROM dual;
 /* ##########*/
 select saida from resultado order by saida;
 /* ##########*/
-/*Como os ambientes de teste estão disponíveis apenas para SQLLite, não foi possível detectar se há algum problema nos decodes
-Também não foi implementado tratamento de erros.*/
+/*Como os ambientes de teste estão disponíveis apenas para SQLLite, instalando Oracle Xe para testes*/
+
 /* A solução também pode usar diretamente dbms_output.put_line(decode ...), ao invés de guardar os registros em tabela*/
