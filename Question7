@@ -1,0 +1,12 @@
+/* 7 */
+
+CREATE OR REPLACE FUNCTION  Contar(Caracteres VARCHAR2) Return number
+Result number := 0;
+BEGIN
+Result := INSTR(Caracteres,  SUBSTR(Caracteres,-1,1)) ;
+Return Result;
+END Contar;
+
+
+  
+
