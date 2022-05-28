@@ -1,0 +1,44 @@
+/* 12 */
+ 
+
+/*  Ao criar uma tarefa, o sistema deve chamar uma função que irá inserir na tabela de tarefas os dados.
+TRIGGER Tarefas chamar function */
+
+CREATE OR REPLACE
+PACKAGE OM_PKG_TASK AS
+
+FUNCTION Registry_TASK(p_nome_tarefa       IN             VARCHAR2,  p_area  IN             VARCHAR2);
+FUNCTION Check_Equipe_Area(p_nome_tarefa       IN             VARCHAR2,  p_area  IN             VARCHAR2);
+PROCEDURE RegLOG(param1 IN VARCHAR2);
+
+END OM_PKG_TASK;
+
+
+
+
+CREATE OR REPLACE  PACKAGE BODY OM_PKG_TASK AS
+
+FUNCTION Registry_TASK(p_nome_tarefa       IN             VARCHAR2,  p_area  IN             VARCHAR2) 
+  RETURN VARCHAR2 IS
+  
+   
+   
+  Call Check_Equipe_Area*/
+  
+  
+   
+ 
+  /* PROCEDURE REg_LOG(...); Registra LOG */
+
+END OM_PKG_TASK;
+
+
+
+/* Bloco para chamar a PACKAGE*/
+DECLARE
+
+BEGIN
+
+  OM_PKG_TASK.Registry_TASK
+
+END;
