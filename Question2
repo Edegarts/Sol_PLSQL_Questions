@@ -15,3 +15,42 @@ select saida from resultado order by saida;
 /*Como os ambientes de teste estão disponíveis apenas para SQLLite, não foram feitos testes*/
 
 /* A solução também pode usar diretamente dbms_output.put_line(decode ...), ao invés de guardar registros em tabela*/
+/* Código não efetivo sem testes. Usando base de dados para testar :*/
+/* Solução usando tabela */
+/* ##########*/
+CREATE TABLE "ETSANTOS"."RESULT2" 
+   (	"SAIDA" VARCHAR2);
+/* ##########*/  
+
+create or replace function pnumb2 return varchar2 as 
+begin  
+        for i in 1 .. 100        loop
+           INSERT INTO result2 (SAIDA) values (decode (mod(i,15),0, 'FooBaa',
+                                                            (decode(mod(i, 3),0,'Foo', 
+                                                                    (decode(mod(i,5),0,'Baa',i))))));
+                                                                    
+    
+                                                                    
+       /*    dbms_output.put_line( case   
+                                    WHEN mod(i,15)=0 THEN 'FooBaa'
+                                    WHEN mod(i,3)=0 THEN 'Foo'
+                                    WHEN mod(i,3)=0 THEN 'Baa' 
+                                    ELSE i END ); */
+                                    
+           
+                                                                    
+        end loop;
+        commit;
+end pnumb2;
+/* ##########*/ 
+DECLARE
+  v_Return VARCHAR2(200);
+BEGIN
+
+  v_Return := PNUMB2();
+ 
+  :v_Return := v_Return;
+--rollback; 
+END;
+/* ##########*/ 
+select saida from result2;
