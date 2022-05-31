@@ -16,6 +16,10 @@ select saida from resultado order by saida;
 
 /* A solução também pode usar diretamente dbms_output.put_line(decode ...), ao invés de guardar registros em tabela*/
 /* Código não efetivo sem testes. Usando base de dados para testar :*/
+
+
+
+
 /* Solução usando tabela */
 /* ##########*/
 CREATE TABLE "ETSANTOS"."RESULT2" 
