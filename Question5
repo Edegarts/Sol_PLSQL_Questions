@@ -14,3 +14,22 @@ from (
 where X.Nota < 8
 ) y
 order by CASE WHEN Nome != 'NULL' THEN y.Nota desc ELSE y.Nota asc END, y.Nome
+
+ /* ########################## */
+ 
+Select y.* from 
+ (select A.Nome ,N.NOTA, A.Valor from Alunos A , Notas N
+ Where A.valor BETWEEN N.VALOR_MIN AND N.VALOR_MAX AND N.NOTA >=8
+ UNION
+  select 'NULL' ,N.NOTA, A.Valor from Alunos A , Notas N
+ Where A.valor BETWEEN N.VALOR_MIN AND N.VALOR_MAX AND N.NOTA <8 )y
+order by  Nota desc, CASE WHEN Nome = 'NULL' THEN y.NOTA  END asc, CASE WHEN Nome != 'NULL' THEN y.NOTA END desc, y.Nome;
+
+ /* #############SAIDA############# */
+-- Maria	10	99
+-- Julia	9	81
+-- Marcela	9	88
+-- Andreia	8	78
+- -NULL	7	63
+-- NULL	7	68
+ 
