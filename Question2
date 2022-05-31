@@ -33,17 +33,7 @@ begin
                                                             (decode(mod(i, 3),0,'Foo', 
                                                                     (decode(mod(i,5),0,'Baa',i))))));
                                                                     
-    
-                                                                    
-       /*    dbms_output.put_line( case   
-                                    WHEN mod(i,15)=0 THEN 'FooBaa'
-                                    WHEN mod(i,3)=0 THEN 'Foo'
-                                    WHEN mod(i,3)=0 THEN 'Baa' 
-                                    ELSE i END ); */
-                                    
-           
-                                                                    
-        end loop;
+       end loop;
         commit;
 end pnumb2;
 /* ##########*/ 
@@ -58,3 +48,32 @@ BEGIN
 END;
 /* ##########*/ 
 select saida from result2;
+
+
+
+
+
+/* ##########*/ 
+/* SEM USAR TABELA */
+/* ##########*/ 
+
+set serveroutput on
+
+/* ##########*/ 
+
+begin  
+        for i in 1 .. 100        loop
+          
+                                                                    
+       dbms_output.put_line( case   
+                                    WHEN to_char(mod(i,15))='0' THEN 'FooBaa'
+                                    WHEN to_char(mod(i,3))='0' THEN 'Foo'
+                                    WHEN to_char(mod(i,5))='0' THEN 'Baa' 
+                                    ELSE to_char(i) END ); 
+                                    
+           
+                                                                    
+        end loop;
+        commit;
+end ;
+/* ##########*/ 
