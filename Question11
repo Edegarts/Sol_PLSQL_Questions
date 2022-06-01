@@ -1,7 +1,7 @@
 /* 11 */
 
 CREATE table Equipes(
-                oid_Equipes number not null primary key AUTOINCREMENT,
+                oid_Equipes number not null primary key ,
                 nome VARCHAR2,
 				nome_b1 VARCHAR2,
 				nome_b2 VARCHAR2,
@@ -10,7 +10,7 @@ CREATE table Equipes(
 );
 ALTER TABLE Equipes ADD CONSTRAINT Equipes_Status column_name_check (status in ( '1', '0' ));
 CREATE TABLE Tarefas(
-                oid_Tarefas number not null primary key AUTOINCREMENT,
+                oid_Tarefas number not null primary key ,
                 nome VARCHAR2,
                 data_criacao DATE,
                 area VARCHAR2,
@@ -19,7 +19,7 @@ CREATE TABLE Tarefas(
 ALTER TABLE Tarefas ADD CONSTRAINT equipe_responsavel_fk FOREIGN KEY (equipe_responsavel) REFERENCES Equipes (nome));
 
 CREATE TABLE LOGs(
-                oid_LOG number not null primary key AUTOINCREMENT,
+                oid_LOG number not null primary key ,
                 data_LOG DATE,
                 subtipo number,
                 natureza number
@@ -31,4 +31,34 @@ INSERT INTO Equipes(nome, nome_b1, nome_b2, nome_b3, status) VALUES ('BETA1','MT
 
 /* ##################### */
 
+CREATE table Equipes(
+                oid_Equipes number not null primary key ,
+                nome VARCHAR2,
+				nome_b1 VARCHAR2,
+				nome_b2 VARCHAR2,
+				nome_b3 VARCHAR2,
+				status CHAR(1)
+);
+-- Criar sequence e trigger para PK
+
+ALTER TABLE Equipes ADD CONSTRAINT Equipes_Status column_name_check (status in ( '1', '0' ));
+CREATE TABLE Tarefas(
+                oid_Tarefas number not null primary key ,
+                nome VARCHAR2,
+                data_criacao DATE,
+                area VARCHAR2,
+                equipe_responsavel VARCHAR2
+);
+
+ALTER TABLE Tarefas ADD CONSTRAINT equipe_responsavel_fk FOREIGN KEY (equipe_responsavel) REFERENCES Equipes (nome));
+-- Criar sequence e trigger para PK
+
+CREATE TABLE LOGs(
+                oid_LOG number not null primary key ,
+                data_LOG DATE,
+                subtipo number,
+                natureza number
+);
+-- Criar sequence e trigger para PK
+--...
 
