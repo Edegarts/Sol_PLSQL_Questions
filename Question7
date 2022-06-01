@@ -7,6 +7,36 @@ Result := INSTR(Caracteres,  SUBSTR(Caracteres,-1,1)) ;
 Return Result;
 END Contar;
 
+/* ########################## */
 
-  
+
+  create or replace function contastr(str_carac VARCHAR2) return number as 
+control number:=0;
+vcaracs varchar2(5000):=str_carac;
+begin  
+    LOOP
+        vcaracs := substr(vcaracs,2) ;
+        control := (control + 1) ;
+        IF vcaracs is null THEN
+            dbms_output.put_line(control);
+            return control;
+        EXIT;
+        end if;
+    end loop;
+    return(control);
+    END;
+
+/* ################ */
+
+DECLARE
+  STR_CARAC VARCHAR2(200);
+  v_Return NUMBER;
+BEGIN
+  STR_CARAC := 'cadeia de caracteres';
+
+  v_Return := CONTASTR(
+    STR_CARAC => STR_CARAC
+  );
+   :v_Return := v_Return;
+ END;
 
