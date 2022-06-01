@@ -28,3 +28,7 @@ CREATE TABLE LOGs(
 INSERT INTO Equipes(nome, nome_b1, nome_b2, nome_b3, status) VALUES ('ALPHA1','MT_07019', '13TRF', 'E08796', 0);
 INSERT INTO Equipes(nome, nome_b1, nome_b2, nome_b3, status) VALUES ('BETA2','MT_11606', '13TRF', 'E08115', 1);
 INSERT INTO Equipes(nome, nome_b1, nome_b2, nome_b3, status) VALUES ('BETA1','MT_07901', '13TRF', 'E09516', 1);
+
+/* ##################### */
+
+
