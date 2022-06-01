@@ -32,3 +32,46 @@ BEGIN
 Insere_om (:new.oid, :new.v_tipo, :nem.v_subtipo);
 
 END Grava_om_record;
+
+/* #############################*/
+
+
+CREATE SEQUENCE call_seq START WITH 1;
+
+/* ###############*/
+CREATE OR REPLACE TRIGGER call_bir
+BEFORE INSERT ON tcall 
+FOR EACH ROW
+
+BEGIN
+  SELECT call_seq.NEXTVAL
+  INTO   :new.oid
+  FROM   dual;
+END;
+
+
+/* ###############*/
+create or replace PROCEDURE Insere_om (v_oid number,v_tipo number, v_subtipo number) AS
+
+ check_Natureza number;
+ BEGIN
+    SELECT count(*) into check_Natureza  from om_record_natureza om where om.tipo = v_tipo and om.subtipo = v_subtipo;
+    
+    IF check_Natureza > 0 THEN
+        INSERT INTO om_record (OID, tipo, subtipo, natureza, data_criacao) values (v_oid ,v_tipo , v_subtipo ,(select om.natureza from om_record_natureza om where om.tipo = v_tipo and om.subtipo = v_subtipo) , sysdate);
+    ELSE
+    INSERT INTO om_record (OID, tipo, subtipo, natureza, data_criacao) values (v_oid ,v_tipo , v_subtipo ,0 , sysdate);
+    END IF;
+    --COMMIT;
+    END;
+    
+/* ###############*/
+create or replace TRIGGER Grav_om_record
+BEFORE INSERT  ON tcall REFERENCING NEW AS NEW OLD AS OLD
+FOR EACH ROW
+DECLARE
+
+BEGIN
+Insere_om (:new.oid, :new.tipo, :new.subtipo);
+
+END Grava_om_record;
