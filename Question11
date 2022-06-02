@@ -82,10 +82,10 @@ END;
 
 
 CREATE TABLE ETSANTOS.LOGs(
-                oid_LOG number not null primary key ,
+                oid number not null primary key ,
                 data_LOG DATE,
-                subtipo number,
-                natureza number
+                codigo number,
+                descricao  VARCHAR2(100)
 );
 
 CREATE SEQUENCE oid_LOGs_seq START WITH 1;
