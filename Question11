@@ -31,34 +31,77 @@ INSERT INTO Equipes(nome, nome_b1, nome_b2, nome_b3, status) VALUES ('BETA1','MT
 
 /* ##################### */
 
-CREATE table Equipes(
-                oid_Equipes number not null primary key ,
-                nome VARCHAR2,
-				nome_b1 VARCHAR2,
-				nome_b2 VARCHAR2,
-				nome_b3 VARCHAR2,
+CREATE TABLE ETSANTOS.Equipes (
+                oid number not null primary key ,
+                nome VARCHAR2(100),
+				nome_b1 VARCHAR2(100),
+				nome_b2 VARCHAR2(100),
+				nome_b3 VARCHAR2(100),
 				status CHAR(1)
 );
--- Criar sequence e trigger para PK
 
-ALTER TABLE Equipes ADD CONSTRAINT Equipes_Status column_name_check (status in ( '1', '0' ));
-CREATE TABLE Tarefas(
-                oid_Tarefas number not null primary key ,
-                nome VARCHAR2,
+
+ALTER TABLE ETSANTOS.Equipes ADD CONSTRAINT Equipes_Status CHECK (status in ( '1', '0' ));
+
+CREATE SEQUENCE oid_Equipes_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER oid_Equipes_bir
+BEFORE INSERT ON  ETSANTOS.Equipes
+FOR EACH ROW
+
+BEGIN
+  SELECT oid_Equipes_seq.NEXTVAL
+  INTO   :new.oid
+  FROM   dual;
+END;
+
+
+CREATE TABLE ETSANTOS.Tarefas(
+                oid number not null primary key ,
+                nome VARCHAR2(100),
                 data_criacao DATE,
-                area VARCHAR2,
-                equipe_responsavel VARCHAR2
+                area VARCHAR2(100),
+                equipe_responsavel number
 );
 
-ALTER TABLE Tarefas ADD CONSTRAINT equipe_responsavel_fk FOREIGN KEY (equipe_responsavel) REFERENCES Equipes (nome));
--- Criar sequence e trigger para PK
+ALTER TABLE ETSANTOS.Tarefas ADD CONSTRAINT equipe_responsavel_fk FOREIGN KEY (equipe_responsavel) REFERENCES ETSANTOS.Equipes (oid);
 
-CREATE TABLE LOGs(
+CREATE SEQUENCE oid_Tarefas_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER oid_Tarefas_bir
+BEFORE INSERT ON  ETSANTOS.Tarefas
+FOR EACH ROW
+
+BEGIN
+  SELECT oid_Tarefas_seq.NEXTVAL
+  INTO   :new.oid
+  FROM   dual;
+END;
+
+
+
+
+CREATE TABLE ETSANTOS.LOGs(
                 oid_LOG number not null primary key ,
                 data_LOG DATE,
                 subtipo number,
                 natureza number
 );
--- Criar sequence e trigger para PK
---...
 
+CREATE SEQUENCE oid_LOGs_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER oid_LOG_bir
+BEFORE INSERT ON  ETSANTOS.LOGs
+FOR EACH ROW
+
+BEGIN
+  SELECT oid_LOGs_seq.NEXTVAL
+  INTO   :new.oid
+  FROM   dual;
+END;
+
+INSERT INTO ETSANTOS.Equipes(nome, nome_b1, nome_b2, nome_b3, status) VALUES ('ALPHA1','MT_07019', '13TRF', 'E08796', 0);
+INSERT INTO ETSANTOS.Equipes(nome, nome_b1, nome_b2, nome_b3, status) VALUES ('BETA2','MT_11606', '13TRF', 'E08115', 1);
+INSERT INTO ETSANTOS.Equipes(nome, nome_b1, nome_b2, nome_b3, status) VALUES ('BETA1','MT_07901', '13TRF', 'E09516', 1);
+
+commit;
