@@ -42,3 +42,97 @@ BEGIN
   OM_PKG_TASK.Registry_TASK
 
 END;
+
+
+/* ############################## */
+
+create or replace PACKAGE OM_PKG_TASK AS 
+
+FUNCTION Check_Equipe_Area(p_nome_tarefa   IN     TAREFAS.nome%TYPE,  p_area  IN       TAREFAS.area%TYPE)  RETURN number;
+PROCEDURE RegLOG(param1 IN VARCHAR2);
+PROCEDURE  Reg_TASK(p_nome_tarefa    IN     TAREFAS.nome%TYPE,  p_area  IN       TAREFAS.area%TYPE, p_OUT OUT VARCHAR2);
+
+END OM_PKG_TASK;
+
+
+CREATE OR REPLACE  PACKAGE BODY OM_PKG_TASK AS
+
+
+FUNCTION Check_Equipe_Area(p_nome_tarefa   VARCHAR2,  p_area   VARCHAR2) RETURN number IS
+
+v_Equipe_Area equipes.nome%TYPE;
+v_Equipe_Ativa equipes.status%TYPE;
+retorno number;
+
+BEGIN
+SELECT Eq.NOME INTO v_Equipe_Area FROM EQUIPES Eq WHERE eq.nome_b1||'/'||eq.nome_b2||'/'||eq.nome_b2 = p_area;
+SELECT Eq.STATUS INTO v_Equipe_Ativa FROM EQUIPES Eq WHERE eq.nome_b1||'/'||eq.nome_b2||'/'||eq.nome_b2 = p_area;
+    IF (v_Equipe_Area is null) THEN
+        retorno := -1; -- não existe equipe na área
+    ELSE  
+        IF v_Equipe_Ativa = 0 THEN
+        retorno := -2; -- existe equipe , mas não está ativa
+        ELSE
+        retorno := 0; -- existe equipe, e está ativa
+         END IF;
+    END IF;  
+ Return (retorno);
+END;
+
+PROCEDURE RegLOG(param1 IN number) IS
+--v_PAR number;
+BEGIN
+    INSERT INTO LOGS(data_LOG,codigo,descricao) VALUES (sysdate, param1, decode(param1, -1, 'Não existe equipe na área',
+                                                                                    -2, 'Existe equipe , mas não está ativa',
+                                                                                    0 , 'Existe equipe ativa na área','') );
+
+END RegLOG;
+
+PROCEDURE Reg_TASK(p_nome_tarefa    IN     TAREFAS.nome%TYPE,  p_area  IN       TAREFAS.area%TYPE, p_OUT OUT VARCHAR2) IS
+v_check number;
+v_name_equipe equipes.nome%TYPE;
+BEGIN
+   select  Check_Equipe_Area(p_nome_tarefa, p_area) into v_check from dual;
+   IF v_check = 0 THEN
+     select eq.nome into v_name_equipe from Equipes eq where  eq.nome_b1||'/'||eq.nome_b2||'/'||eq.nome_b2 = p_area and rownum <2;
+        INSERT INTO TAREFAS(NOME, DATA_CRIACAO, AREA, EQUIPE_RESPONSAVEL) 
+                VALUES (p_nome_tarefa, sysdate, p_AREA, v_name_equipe);
+    RegLOG (v_check);
+    p_OUT := 'Tarefa com Equipe Ativa na área.';
+
+    ELSIF v_check = -1 THEN
+    INSERT INTO TAREFAS(NOME, DATA_CRIACAO, AREA, EQUIPE_RESPONSAVEL) 
+                VALUES (p_nome_tarefa, sysdate, p_AREA, 0);
+    RegLOG (v_check);
+    p_OUT := 'Não existe Equipe na área.';
+    ELSIF v_check = -2 THEN
+    INSERT INTO TAREFAS(NOME, DATA_CRIACAO, AREA, EQUIPE_RESPONSAVEL) 
+                VALUES (p_nome_tarefa, sysdate, p_AREA, 0);
+    RegLOG (v_check);
+    p_OUT := 'Equipe na área, mas inativa.';
+    ELSE
+    p_OUT := 'Tarefa não gravada.';
+    END IF;
+END Reg_TASK;
+
+END OM_PKG_TASK;
+
+
+/* Bloco para chamar a PACKAGE*/
+DECLARE
+v_NOME_TAREFA tarefas.nome%TYPE;
+v_AREA tarefas.area%TYPE;
+v_OUT VARCHAR2(50);
+BEGIN
+    v_NOME_TAREFA :='TAREFA01';
+    v_AREA := 'MT_07901/13TRF/E09516';
+    
+  OM_PKG_TASK.Registry_TASK(v_NOME_TAREFA, v_AREA,v_OUT);
+  DBMS_OUTPUT.PUT_LINE(v_OUT);
+END;
+
+
+
+
+
+
