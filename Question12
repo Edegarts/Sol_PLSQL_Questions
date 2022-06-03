@@ -49,7 +49,7 @@ END;
 create or replace PACKAGE OM_PKG_TASK AS 
 
 FUNCTION Check_Equipe_Area(p_nome_tarefa   IN     TAREFAS.nome%TYPE,  p_area  IN       TAREFAS.area%TYPE)  RETURN number;
-PROCEDURE RegLOG(param1 IN VARCHAR2);
+PROCEDURE RegLOG(param1 IN number);
 PROCEDURE  Reg_TASK(p_nome_tarefa    IN     TAREFAS.nome%TYPE,  p_area  IN       TAREFAS.area%TYPE, p_OUT OUT VARCHAR2);
 
 END OM_PKG_TASK;
@@ -58,7 +58,7 @@ END OM_PKG_TASK;
 CREATE OR REPLACE  PACKAGE BODY OM_PKG_TASK AS
 
 
-FUNCTION Check_Equipe_Area(p_nome_tarefa   VARCHAR2,  p_area   VARCHAR2) RETURN number IS
+FUNCTION Check_Equipe_Area(p_nome_tarefa   TAREFAS.nome%TYPE,  p_area   TAREFAS.area%TYPE) RETURN number IS
 
 v_Equipe_Area equipes.nome%TYPE;
 v_Equipe_Ativa equipes.status%TYPE;
@@ -116,23 +116,4 @@ BEGIN
 END Reg_TASK;
 
 END OM_PKG_TASK;
-
-
-/* Bloco para chamar a PACKAGE*/
-DECLARE
-v_NOME_TAREFA tarefas.nome%TYPE;
-v_AREA tarefas.area%TYPE;
-v_OUT VARCHAR2(50);
-BEGIN
-    v_NOME_TAREFA :='TAREFA01';
-    v_AREA := 'MT_07901/13TRF/E09516';
-    
-  OM_PKG_TASK.Registry_TASK(v_NOME_TAREFA, v_AREA,v_OUT);
-  DBMS_OUTPUT.PUT_LINE(v_OUT);
-END;
-
-
-
-
-
 
